@@ -19,6 +19,18 @@ export function ExpenseForm() {
     setSplitSelection((prev) => ({ ...prev, [name]: !prev[name] }))
   }
 
+  const allSelected =
+    participants.length > 0 &&
+    participants.every((p) => splitSelection[p])
+
+  function toggleSelectAll() {
+    if (allSelected) {
+      setSplitSelection({})
+    } else {
+      setSplitSelection(Object.fromEntries(participants.map((p) => [p, true])))
+    }
+  }
+
   function submit(e: React.FormEvent) {
     e.preventDefault()
     const amount = Number.parseFloat(price)
@@ -103,6 +115,14 @@ export function ExpenseForm() {
         <fieldset className="split-fieldset">
           <legend>Split between</legend>
           <div className="split-grid">
+            <label className="check-label">
+              <input
+                type="checkbox"
+                checked={allSelected}
+                onChange={toggleSelectAll}
+              />
+              All
+            </label>
             {participants.map((p) => (
               <label key={p} className="check-label">
                 <input
