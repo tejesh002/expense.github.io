@@ -1,4 +1,4 @@
-import { roundMoney } from '../utils/settlement'
+import { formatInr } from '../utils/formatInr'
 import { useExpenseStore } from '../hooks/useExpenseStore'
 
 export function SummaryPanel() {
@@ -14,9 +14,29 @@ export function SummaryPanel() {
     return null
   }
 
+  async function handleDownloadPdf() {
+    const { downloadSummaryPdf } = await import('../utils/summaryPdf')
+    downloadSummaryPdf({
+      participants,
+      expenses,
+      balances,
+      pairwiseMatrix,
+      transfers,
+    })
+  }
+
   return (
     <section className="panel summary-panel">
-      <h2>Final summary</h2>
+      <div className="summary-panel__head">
+        <h2>Final summary</h2>
+        <button
+          type="button"
+          className="btn-pdf"
+          onClick={handleDownloadPdf}
+        >
+          Download PDF
+        </button>
+      </div>
       <p className="lead">
         Updates automatically whenever you add or remove an expense.
       </p>
@@ -34,7 +54,7 @@ export function SummaryPanel() {
               <strong>{p}</strong>
               <span className={b >= 0 ? 'pos' : 'neg'}>
                 {sign}
-                {formatMoney(b)}
+                {formatInr(b)}
               </span>
             </li>
           )
@@ -58,7 +78,7 @@ export function SummaryPanel() {
               <span className="from">{t.from}</span>
               <span className="arrow">pays</span>
               <span className="to">{t.to}</span>
-              <span className="amt">{formatMoney(t.amount)}</span>
+              <span className="amt">{formatInr(t.amount)}</span>
             </li>
           ))}
         </ul>
@@ -93,7 +113,7 @@ export function SummaryPanel() {
                       {i === j
                         ? '—'
                         : pairwiseMatrix[i]?.[j]
-                          ? formatMoney(pairwiseMatrix[i][j])
+                          ? formatInr(pairwiseMatrix[i][j])
                           : '—'}
                     </td>
                   ))}
@@ -105,13 +125,4 @@ export function SummaryPanel() {
       )}
     </section>
   )
-}
-
-function formatMoney(n: number) {
-  return new Intl.NumberFormat('en-IN', {
-    style: 'currency',
-    currency: 'INR',
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(roundMoney(n))
 }

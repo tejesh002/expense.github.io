@@ -1,4 +1,4 @@
-import { roundMoney } from '../utils/settlement'
+import { formatInr } from '../utils/formatInr'
 import { useExpenseStore } from '../hooks/useExpenseStore'
 
 export function ExpenseList() {
@@ -13,10 +13,16 @@ export function ExpenseList() {
     )
   }
 
+  const scrollable = expenses.length >= 10
+
   return (
     <section className="panel">
       <h2>Expenses</h2>
-      <div className="table-wrap">
+      <div
+        className={
+          scrollable ? 'table-wrap table-wrap--scrollable' : 'table-wrap'
+        }
+      >
         <table className="data-table">
           <thead>
             <tr>
@@ -31,7 +37,7 @@ export function ExpenseList() {
             {expenses.map((e) => (
               <tr key={e.id}>
                 <td>{e.title}</td>
-                <td>{formatMoney(e.price)}</td>
+                <td>{formatInr(e.price)}</td>
                 <td>{e.splitTo.join(', ')}</td>
                 <td>{e.spendBy}</td>
                 <td>
@@ -50,13 +56,4 @@ export function ExpenseList() {
       </div>
     </section>
   )
-}
-
-function formatMoney(n: number) {
-  return new Intl.NumberFormat('en-IN', {
-    style: 'currency',
-    currency: 'INR',
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(roundMoney(n))
 }

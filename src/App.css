@@ -204,6 +204,23 @@ button:not(.btn-ghost):not([type='submit']) {
   margin: 0 -0.25rem;
 }
 
+/* ~1 header + 10 expense rows, then scroll */
+.table-wrap--scrollable {
+  overflow-y: auto;
+  max-height: min(32rem, 55vh);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin: 0;
+}
+
+.table-wrap--scrollable .data-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--panel-bg);
+  box-shadow: 0 1px 0 var(--border);
+}
+
 .data-table {
   width: 100%;
   border-collapse: collapse;
@@ -223,6 +240,35 @@ button:not(.btn-ghost):not([type='submit']) {
   font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
+}
+
+.summary-panel__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.summary-panel__head h2 {
+  margin: 0;
+}
+
+.btn-pdf {
+  padding: 0.45rem 0.9rem;
+  border-radius: 8px;
+  border: 1px solid var(--accent-border);
+  background: var(--accent-bg);
+  color: var(--accent);
+  font: inherit;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.btn-pdf:hover {
+  filter: brightness(0.95);
 }
 
 .summary-panel .balance-list {
